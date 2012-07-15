@@ -1,0 +1,19 @@
+<resources>
+
+    <string name="app_name">Appels d\'urgence</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="title_activity_main">Appels d\'urgence</string>
+
+    <string name="main_first_urgency_call">Numéro d\'urgence principal</string>
+    <string name="main_second_urgency_call">Urgence 2</string>
+    <string name="main_third_urgency_call">Urgence 3</string>
+    <string name="main_four_urgency_call">Urgence 4</string>
+
+    <string name="phone_number_send_sms">SMS sur urgence principal</string>
+    <string name="phone_number_change_contact">…</string>
+    <string name="phone_number_contact">Pas de contact</string>
+    <string name="phone_number_number">N/A</string>
+    <string name="phone_number_reset">Supprimer le contact ?</string>
+    <string name="phone_number_yes">Oui</string>
+    <string name="phone_number_no">Non</string>
+</resources>
