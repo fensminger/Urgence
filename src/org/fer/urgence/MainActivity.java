@@ -13,7 +13,7 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.View;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnLaunchContactPicker {
 	
 	public static final String URGENCE_PREFS = "Urgence_Prefs";
 
@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
         initFromPrefs();
     }
 
-    public void doLaunchContactPicker(int pos) {  
+    public void onLaunchContactPicker(int pos) {  
         Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,  
                 Contacts.CONTENT_URI);  
         contactPickerIntent = new Intent(Intent.ACTION_PICK,  
@@ -55,17 +55,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {  
-	        switch (requestCode) {  
-	        case CONTACT_PICKER_RESULT:  
-	        case CONTACT_PICKER_RESULT+1:  
-	        case CONTACT_PICKER_RESULT+2:  
-	        case CONTACT_PICKER_RESULT+3:
+			if (requestCode>=CONTACT_PICKER_RESULT && requestCode<(CONTACT_PICKER_RESULT+MAX_PHONE_NUMBER)) {
 	        	int numberTel = requestCode - CONTACT_PICKER_RESULT;
 	        	ShortContact shortContact = handleResultFromContactActivity(data);
 	        	phoneNumberList[numberTel].setShortContact(shortContact);
-	            break;  
 	        }  
-	  
 	    } else {  
 	        // gracefully handle failure  
 	    	Log.d("Urgence", "Warning: activity result not ok");  
@@ -94,8 +88,6 @@ public class MainActivity extends Activity {
 		Log.d("Urgence", "Name : " + name + ", phoneNumber : " + phoneNumber);
 		return new ShortContact(name, phoneNumber, null);
 	}
-
-	
 	
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -129,6 +121,8 @@ public class MainActivity extends Activity {
     
    private void initFromPrefs() {
 		SharedPreferences prefs = getSharedPreferences(URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
+		DialPhoneNumber simpleDial = new SimpleDial();
+		DialPhoneNumber simpleWithSmsDial = new SimpleWithSmsDial();
 		for(int i = 0; i<MAX_PHONE_NUMBER ; i++) {
 			String name = prefs.getString(PREF_NAME+i, null);
 			if (name!=null) {
@@ -137,6 +131,39 @@ public class MainActivity extends Activity {
 				ShortContact shortContact = new ShortContact(name, phoneNumber, isSms);
 				phoneNumberList[i].setShortContact(shortContact);
 			}
+			if (i==0) {
+				phoneNumberList[i].initDial(simpleWithSmsDial);
+			} else {
+				phoneNumberList[i].initDial(simpleDial);
+			}
 		}
    }
+   
+   private ShortContact[] getAllShortContacts() {
+	   ShortContact[] res = new ShortContact[MAX_PHONE_NUMBER];
+	   for(int i = 0; i<MAX_PHONE_NUMBER; i++) {
+		   res[i] = phoneNumberList[i].getShortContact();
+	   }
+	   return res;
+   }
+   
+   private class SimpleDial implements DialPhoneNumber {
+		@Override
+		public void call() {
+			ShortContact[] contacts = new ShortContact[] {phoneNumberList[0].getShortContact()};
+			DialService dialService = new DialService();
+			dialService.dial(MainActivity.this, contacts);
+		}
+
+	}
+	
+	private class SimpleWithSmsDial implements DialPhoneNumber {
+		@Override
+		public void call() {
+			ShortContact[] contacts = getAllShortContacts();
+			DialService dialService = new DialService();
+			dialService.dial(MainActivity.this, contacts);
+		}
+
+	}
 }

@@ -27,6 +27,8 @@ public class PhoneNumber extends LinearLayout {
 	private CharSequence defaultName;
 	private CharSequence defaultPhoneNumber;
 	
+	private DialPhoneNumber simpleDial;
+	
 	public PhoneNumber(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
@@ -58,6 +60,10 @@ public class PhoneNumber extends LinearLayout {
 		name.setOnLongClickListener(longClickResetContact);
 		phoneNumber.setOnLongClickListener(longClickResetContact);
 		cbSms.setOnLongClickListener(longClickResetContact);
+		
+		final DialListener dialListener = new DialListener();
+		name.setOnClickListener(dialListener);
+		phoneNumber.setOnClickListener(dialListener);
 	}
 	
 	public void setShortContact(ShortContact shortContact) {
@@ -74,10 +80,9 @@ public class PhoneNumber extends LinearLayout {
     	builder.setMessage(ressources.getText(R.string.phone_number_reset))
     	.setCancelable(false)
     	.setNegativeButton(ressources.getText(R.string.phone_number_no), new DialogInterface.OnClickListener() {
-			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// On ne fait rien
+				// We do nothing on cancel.
 			}
 		})
     	.setPositiveButton(ressources.getText(R.string.phone_number_yes), new DialogInterface.OnClickListener() {
@@ -122,12 +127,12 @@ public class PhoneNumber extends LinearLayout {
 		outState.putBoolean(SMS+pos, cbSms.isChecked());
 	}
 
-	public void initSetContact(final MainActivity mainActivity, final int pos) {
+	public void initSetContact(final OnLaunchContactPicker mainActivity, final int pos) {
 		contactBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				mainActivity.doLaunchContactPicker(pos);
+				mainActivity.onLaunchContactPicker(pos);
 			}
 		});
 	}
@@ -138,6 +143,17 @@ public class PhoneNumber extends LinearLayout {
 			resetShortContactWithDlgConfirmation();
 			return true;
 		}
+	}
+
+	private final class DialListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			simpleDial.call();
+		}
+	}
+
+	public void initDial(DialPhoneNumber simpleDial) {
+		this.simpleDial = simpleDial;
 	}
 }
 

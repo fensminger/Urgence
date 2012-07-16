@@ -16,4 +16,7 @@
     <string name="phone_number_reset">Supprimer le contact ?</string>
     <string name="phone_number_yes">Oui</string>
     <string name="phone_number_no">Non</string>
+
+    <string name="dial_sms_body">J\'ai un problème.</string>
+    <string name="dial_sms_location">J\'ai un problème. http://maps.google.fr/maps?saddr={0},{1}&amp;hl=fr&amp;sll={0},{1}&amp;sspn=0.184145,0.390358&amp;mra=mift&amp;mrsp=0&amp;sz=12&amp;t=m&amp;z=12</string>
 </resources>
