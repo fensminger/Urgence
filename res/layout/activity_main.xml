@@ -62,6 +62,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
         </org.fer.urgence.PhoneNumber>
+        
+        <TextView
+            android:id="@+id/textView5"
+            style="@style/titleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/main_fith_urgency_call"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <org.fer.urgence.PhoneNumber
+            android:id="@+id/phoneNumber4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </org.fer.urgence.PhoneNumber>
+        
     </LinearLayout>
 
 </ScrollView>

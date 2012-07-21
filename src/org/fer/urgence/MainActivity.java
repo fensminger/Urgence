@@ -1,9 +1,11 @@
 package org.fer.urgence;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,17 +14,10 @@ import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.View;
+import static org.fer.urgence.PreferenceMgr.*;
 
 public class MainActivity extends Activity implements OnLaunchContactPicker {
 	
-	public static final String URGENCE_PREFS = "Urgence_Prefs";
-
-	private static final String PREF_IS_SMS = "IsSMS_";
-	private static final String PREF_PHONE_NUMBER = "PhoneNumber_";
-	private static final String PREF_NAME = "Name_";
-
-	private static final int MAX_PHONE_NUMBER = 4;
-
 	private static final int CONTACT_PICKER_RESULT = 1001;  
 	
 	PhoneNumber[] phoneNumberList = new PhoneNumber[MAX_PHONE_NUMBER];
@@ -36,6 +31,7 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
         phoneNumberList[i++] = (PhoneNumber) findViewById(R.id.phoneNumber1);
         phoneNumberList[i++] = (PhoneNumber) findViewById(R.id.phoneNumber2);
         phoneNumberList[i++] = (PhoneNumber) findViewById(R.id.phoneNumber3);
+        phoneNumberList[i++] = (PhoneNumber) findViewById(R.id.phoneNumber4);
         
         for(i = 0; i<MAX_PHONE_NUMBER; i++) {
         	 phoneNumberList[i].initSetContact(this, i);
@@ -108,28 +104,27 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 	@Override
 	protected void onStop() {
 		SharedPreferences prefs = getSharedPreferences(URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
+		PreferenceMgr prefMgr = new PreferenceMgr(prefs);
+		List<ShortContact> contacts = new ArrayList<ShortContact>();
 		for(int i = 0; i<MAX_PHONE_NUMBER ; i++) {
 			ShortContact shortContact = phoneNumberList[i].getShortContact();
-			Editor editor = prefs.edit();
-			editor.putString(PREF_NAME+i, shortContact.getContactName().toString());
-			editor.putString(PREF_PHONE_NUMBER+i, shortContact.getPhoneNumber().toString());
-			editor.putBoolean(PREF_IS_SMS+i, shortContact.isSms());
-			editor.commit();
+			contacts.add(shortContact);
 		}
+		prefMgr.saveAllContacts(contacts);
 		super.onStop();
 	}  
     
    private void initFromPrefs() {
 		SharedPreferences prefs = getSharedPreferences(URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
+		PreferenceMgr prefMgr = new PreferenceMgr(prefs);
 		DialPhoneNumber simpleDial = new SimpleDial();
 		DialPhoneNumber simpleWithSmsDial = new SimpleWithSmsDial();
+		List<ShortContact> contacts = prefMgr.getAllContacts();
+		
 		for(int i = 0; i<MAX_PHONE_NUMBER ; i++) {
-			String name = prefs.getString(PREF_NAME+i, null);
-			if (name!=null) {
-				String phoneNumber = prefs.getString(PREF_PHONE_NUMBER+i, null);
-				Boolean isSms = prefs.getBoolean(PREF_IS_SMS+i, false);
-				ShortContact shortContact = new ShortContact(name, phoneNumber, isSms);
-				phoneNumberList[i].setShortContact(shortContact);
+			ShortContact contact = (i<contacts.size())?contacts.get(i):null;
+			if (contact !=null && contact.getContactName()!=null) {
+				phoneNumberList[i].setShortContact(contacts.get(i));
 			}
 			if (i==0) {
 				phoneNumberList[i].initDial(simpleWithSmsDial);

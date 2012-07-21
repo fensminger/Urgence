@@ -34,5 +34,10 @@ public class ShortContact {
 	public void setSms(Boolean sms) {
 		this.sms = sms;
 	}
+
+	@Override
+	public String toString() {
+		return "ShortContact [contactName=" + contactName + ", phoneNumber=" + phoneNumber + ", sms=" + sms + "]";
+	}
 	
 }
