@@ -1,9 +1,10 @@
 package org.fer.urgence;
 
 import java.text.MessageFormat;
+import java.util.List;
 
-import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,26 +20,28 @@ public class DialService {
 
 	private static final String SINGLE_LOCATION_UPDATE_ACTION = "SINGLE_LOCATION_UPDATE_ACTION";
 
-	public void dial(Activity act, ShortContact[] shortContact) {
-		String url = "tel:" + shortContact[0].getPhoneNumber();
+	public void dial(Service service, List<ShortContact> shortContacts, int pos) {
+		String url = "tel:" + shortContacts.get(pos).getPhoneNumber();
 		Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
-		act.startActivity(intent);
-		if (shortContact.length > 1) {
-			this.act = act;
-			this.contacts = shortContact;
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+	    service.startActivity(intent);
+		if (pos == 0 && shortContacts.size() > 1) {
+			this.service = service;
+			this.contacts = shortContacts;
 			sendSmsLocation();
 		}
 	}
 
 	private LocationManager locationManager;
 	private PendingIntent singleUpatePI;
-	private Activity act;
-	private ShortContact[] contacts;
+	private Service service;
+	private List<ShortContact> contacts;
 
 	private void sendSmsLocation() {
 		String locationContext = Context.LOCATION_SERVICE;
 
-		locationManager = (android.location.LocationManager) act.getSystemService(locationContext);
+		locationManager = (android.location.LocationManager) service.getSystemService(locationContext);
 //		String locationProvider = android.location.LocationManager.PASSIVE_PROVIDER;
 //		LocationProvider provider = locationManager.getProvider(locationProvider);
 
@@ -47,9 +50,9 @@ public class DialService {
 
 		Intent updateIntent = new Intent(SINGLE_LOCATION_UPDATE_ACTION);
 
-		act.registerReceiver(singleUpdateReceiver, new IntentFilter(SINGLE_LOCATION_UPDATE_ACTION));
+		service.registerReceiver(singleUpdateReceiver, new IntentFilter(SINGLE_LOCATION_UPDATE_ACTION));
 
-		singleUpatePI = PendingIntent.getBroadcast(act, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		singleUpatePI = PendingIntent.getBroadcast(service, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		locationManager.requestSingleUpdate(criteria, singleUpatePI);
 	}
@@ -75,10 +78,10 @@ public class DialService {
 		}
 
 		private void onLocationChanged(Location location) {
-			Resources ress = act.getResources();
+			Resources ress = service.getResources();
 			String msg = ress.getText(R.string.dial_sms_location).toString();
-			for (int i = 1; i < contacts.length; i++) {
-				ShortContact contact = contacts[i];
+			for (int i = 1; i < contacts.size(); i++) {
+				ShortContact contact = contacts.get(i);
 				if (contact != null && contact.isSms()) {
 					String msgFormated = MessageFormat.format(msg, ""+location.getLatitude(), ""+location.getLongitude());
 					SmsManager.getDefault().sendTextMessage(contact.getPhoneNumber().toString(), null, msgFormated, null, null);

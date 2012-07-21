@@ -1,5 +1,6 @@
 package org.fer.urgence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -9,30 +10,49 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-public class UpdateWidgetService extends Service {
+public class EmergencyService extends Service {
 	private static final String LOG = "org.fer.urgence";
 
+	public static final String START_CLICK_ACTION = "WidgetClickAction_";
+	public static final String UPDATE_WIDGET_VIEW_ACTION = "UpdateWidgetViewAction";
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		String action = intent.getAction();
+		if (action!=null && action.startsWith(START_CLICK_ACTION)) {
+			startDial(intent, flags, startId);
+		} else if (UPDATE_WIDGET_VIEW_ACTION.equals(action)) {
+			initWidget(intent, flags, startId);
+		} else {
+			initWidget(intent, flags, startId);
+		}
+		stopSelf();
+		return super.onStartCommand(intent, flags, startId);
+	}
+
+	private void startDial(Intent intent, int flags, int startId) {
+		int pos = intent.getExtras().getInt(AppWidgetManager.EXTRA_CUSTOM_EXTRAS);
+		Log.d(LOG, "UpdateWidgetService.onClick : " + pos);
+		
+		DialService dialService = new DialService();
+		dialService.dial(this, getContacts(), pos);
+	}
+
+	private void initWidget(Intent intent, int flags, int startId) {
 		Log.i(LOG, "UpdateWidgetService.onStartCommand");
-		// Create some random data
 
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this
 				.getApplicationContext());
 
-		int[] allWidgetIds = intent
-				.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-
 		ComponentName thisWidget = new ComponentName(getApplicationContext(),
-				MyWidgetProvider.class);
-		int[] allWidgetIds2 = appWidgetManager.getAppWidgetIds(thisWidget);
-		Log.w(LOG, "From Intent" + String.valueOf(allWidgetIds.length));
-		Log.w(LOG, "Direct" + String.valueOf(allWidgetIds2.length));
-
+				EmergencyWidgetProvider.class);
+		int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);		
+		
 		RemoteViews remoteViews = new RemoteViews(this
 				.getApplicationContext().getPackageName(),
 				R.layout.widget_layout);
@@ -40,22 +60,26 @@ public class UpdateWidgetService extends Service {
 		
 		for (int widgetId : allWidgetIds) {
 
-			// Register an onClickListener
-			Intent clickIntent = new Intent(this.getApplicationContext(),
-					MyWidgetProvider.class);
-
-			clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-			clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
-					allWidgetIds);
-
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent,
-					PendingIntent.FLAG_UPDATE_CURRENT);
-			remoteViews.setOnClickPendingIntent(R.id.tvCall, pendingIntent);
+			initOneClickListener(remoteViews, allWidgetIds, R.id.tvCall, 0);
+			initOneClickListener(remoteViews, allWidgetIds, R.id.tvCall1, 1);
+			initOneClickListener(remoteViews, allWidgetIds, R.id.tvCall2, 2);
+			initOneClickListener(remoteViews, allWidgetIds, R.id.tvCall3, 3);
+			initOneClickListener(remoteViews, allWidgetIds, R.id.tvCall4, 4);
+			
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
 		}
-		stopSelf();
+	}
+	
+	private void initOneClickListener(RemoteViews remoteViews, int[] allWidgetIds, int viewId, int pos) {
+		Intent clickIntent = new Intent(this.getApplicationContext(),
+				EmergencyWidgetProvider.class);
 
-		return super.onStartCommand(intent, flags, startId);
+		clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE+pos);
+		clickIntent.putExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, pos);
+
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
 	}
 	
 	private void initView(RemoteViews remoteViews) {

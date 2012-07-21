@@ -1,8 +1,10 @@
 package org.fer.urgence;
 
 import android.app.AlertDialog;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -27,7 +29,7 @@ public class PhoneNumber extends LinearLayout {
 	private CharSequence defaultName;
 	private CharSequence defaultPhoneNumber;
 	
-	private DialPhoneNumber simpleDial;
+	private int pos;
 	
 	public PhoneNumber(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -59,7 +61,7 @@ public class PhoneNumber extends LinearLayout {
 		final LongClickResetContact longClickResetContact = new LongClickResetContact();
 		name.setOnLongClickListener(longClickResetContact);
 		phoneNumber.setOnLongClickListener(longClickResetContact);
-		cbSms.setOnLongClickListener(longClickResetContact);
+		//cbSms.setOnLongClickListener(longClickResetContact);
 		
 		final DialListener dialListener = new DialListener();
 		name.setOnClickListener(dialListener);
@@ -119,6 +121,7 @@ public class PhoneNumber extends LinearLayout {
 				cbSms.setChecked(contactSms);
 			}
 		}
+		this.pos = pos;
 	}
 
 	public void save(Bundle outState, int pos) {
@@ -148,12 +151,21 @@ public class PhoneNumber extends LinearLayout {
 	private final class DialListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			simpleDial.call();
+			onDial();
 		}
 	}
+	
+	public void onDial() {
+		Context context = getContext();
+		Intent intentService = new Intent(context.getApplicationContext(),
+				EmergencyService.class);
+		intentService.setAction(EmergencyService.START_CLICK_ACTION);
+		intentService.putExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, pos);
+		context.startService(intentService);
+	}
 
-	public void initDial(DialPhoneNumber simpleDial) {
-		this.simpleDial = simpleDial;
+	public void initPos(int pos) {
+		this.pos = pos;
 	}
 }
 

@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
     <TextView
         android:id="@+id/tvCall"
         style="@style/WidgetTextStyleLarge"
@@ -18,14 +17,13 @@
         android:gravity="center_horizontal|center_vertical"
         android:height="160dp"
         android:text="" />
-
-    <LinearLayout
+    <LinearLayout
         android:id="@+id/LinearLayout1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical" >
-
+
         <TextView
             android:id="@+id/tvCall1"
             style="@style/WidgetTextStyle"
@@ -38,8 +36,7 @@
             android:gravity="center_horizontal|center_vertical"
             android:height="80dp"
             android:text="" />
-
-        <TextView
+        <TextView
             android:id="@+id/tvCall3"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
@@ -52,15 +49,13 @@
             android:text="" />
 
     </LinearLayout>
-
-    <LinearLayout
+    <LinearLayout
         android:id="@+id/LinearLayout2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical" >
-
-        <TextView
+        <TextView
             android:id="@+id/tvCall2"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
@@ -70,8 +65,7 @@
             android:gravity="center_horizontal|center_vertical"
             android:height="80dp"
             android:text="" />
-
-        <TextView
+        <TextView
             android:id="@+id/tvCall4"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"

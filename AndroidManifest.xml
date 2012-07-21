@@ -18,7 +18,7 @@
 		<receiver
 		       android:icon="@drawable/ic_launcher"
 		       android:label="@string/app_name"
-		       android:name="MyWidgetProvider" >
+		       android:name=".EmergencyWidgetProvider" >
 		       <intent-filter >
 		            <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 		       </intent-filter>
@@ -27,7 +27,7 @@
 		          android:name="android.appwidget.provider"
 		          android:resource="@xml/widget_info" />
 		</receiver>
-		<service android:name=".UpdateWidgetService"></service>
+		<service android:name=".EmergencyService"></service>
 		<activity android:name="MainActivity">
 		    <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

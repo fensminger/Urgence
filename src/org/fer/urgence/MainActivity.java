@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -87,22 +88,36 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 	
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
 		for(int i = 0; i<MAX_PHONE_NUMBER; i++) {
 			phoneNumberList[i].restore(savedInstanceState, i);
 		}
-		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 		for(int i = 0; i<MAX_PHONE_NUMBER; i++) {
 			phoneNumberList[i].save(outState, i);
 		}
-		super.onSaveInstanceState(outState);
 	}
 
 	@Override
-	protected void onStop() {
+	protected void onPause() {
+		saveContacts();
+		updateWidgetView();
+		super.onPause();
+	}
+
+	private void updateWidgetView() {
+		Context context = getApplicationContext();
+		Intent intentService = new Intent(context.getApplicationContext(),
+				EmergencyService.class);
+		intentService.setAction(EmergencyService.UPDATE_WIDGET_VIEW_ACTION);
+		context.startService(intentService);
+	}
+
+	private void saveContacts() {
 		SharedPreferences prefs = getSharedPreferences(URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
 		PreferenceMgr prefMgr = new PreferenceMgr(prefs);
 		List<ShortContact> contacts = new ArrayList<ShortContact>();
@@ -117,8 +132,6 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
    private void initFromPrefs() {
 		SharedPreferences prefs = getSharedPreferences(URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
 		PreferenceMgr prefMgr = new PreferenceMgr(prefs);
-		DialPhoneNumber simpleDial = new SimpleDial();
-		DialPhoneNumber simpleWithSmsDial = new SimpleWithSmsDial();
 		List<ShortContact> contacts = prefMgr.getAllContacts();
 		
 		for(int i = 0; i<MAX_PHONE_NUMBER ; i++) {
@@ -126,39 +139,8 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 			if (contact !=null && contact.getContactName()!=null) {
 				phoneNumberList[i].setShortContact(contacts.get(i));
 			}
-			if (i==0) {
-				phoneNumberList[i].initDial(simpleWithSmsDial);
-			} else {
-				phoneNumberList[i].initDial(simpleDial);
-			}
+			phoneNumberList[i].initPos(i);
 		}
    }
    
-   private ShortContact[] getAllShortContacts() {
-	   ShortContact[] res = new ShortContact[MAX_PHONE_NUMBER];
-	   for(int i = 0; i<MAX_PHONE_NUMBER; i++) {
-		   res[i] = phoneNumberList[i].getShortContact();
-	   }
-	   return res;
-   }
-   
-   private class SimpleDial implements DialPhoneNumber {
-		@Override
-		public void call() {
-			ShortContact[] contacts = new ShortContact[] {phoneNumberList[0].getShortContact()};
-			DialService dialService = new DialService();
-			dialService.dial(MainActivity.this, contacts);
-		}
-
-	}
-	
-	private class SimpleWithSmsDial implements DialPhoneNumber {
-		@Override
-		public void call() {
-			ShortContact[] contacts = getAllShortContacts();
-			DialService dialService = new DialService();
-			dialService.dial(MainActivity.this, contacts);
-		}
-
-	}
 }
