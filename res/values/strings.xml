@@ -18,6 +18,8 @@
     <string name="phone_number_yes">Oui</string>
     <string name="phone_number_no">Non</string>
 
-    <string name="dial_sms_body">J\'ai un problème.</string>
-    <string name="dial_sms_location">J\'ai un problème. http://maps.google.fr/maps?saddr={0},{1}&amp;hl=fr&amp;sll={0},{1}&amp;sspn=0.184145,0.390358&amp;mra=mift&amp;mrsp=0&amp;sz=12&amp;t=m&amp;z=12</string>
+    <string name="dial_sms_body">Je viens d\'appeler les secours.</string>
+    <string name="dial_sms_location">Je viens d\'appeler les secours. Je me trouve ici : http://maps.google.fr/maps?q={0}&amp;hl=fr</string>
+    <string name="dial_try_sms_body">Je viens de tenter d\'appeler les secours. Une erreur ?</string>
+    <string name="dial_try_sms_location">Je viens de tenter d\'appeler les secours. Une erreur ? Je me trouve ici : http://maps.google.fr/maps?q={0}&amp;hl=fr</string>
 </resources>

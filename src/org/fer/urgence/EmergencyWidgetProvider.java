@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class EmergencyWidgetProvider extends AppWidgetProvider {
 
-	private static final String LOG = "org.fer.urgence";
+	private static final String LOG = "EmergencyWidgetProvider";
 
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -36,18 +36,19 @@ public class EmergencyWidgetProvider extends AppWidgetProvider {
 		super.onReceive(context, intent);
 		int pos = 0;
 		try {
-			pos = intent.getExtras().getInt(AppWidgetManager.EXTRA_CUSTOM_EXTRAS);
+			pos = intent.getExtras().getInt(AppWidgetManager.EXTRA_CUSTOM_EXTRAS) - 1;
 		} catch (NullPointerException e) {
 			// We do nothing when the widget is not initialized
 			return;
 		}
-		
-		Log.d(LOG, "onReceive method call : " + pos);
-		Intent intentService = new Intent(context.getApplicationContext(),
-				EmergencyService.class);
-		intentService.setAction(EmergencyService.START_CLICK_ACTION+pos);
-		intentService.putExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, pos);
-		context.startService(intentService);
+		if (pos >= 0) {
+			Log.d(LOG, "onReceive method call : " + pos);
+			Intent intentService = new Intent(context.getApplicationContext(),
+					EmergencyService.class);
+			intentService.setAction(EmergencyService.START_CLICK_ACTION+pos);
+			intentService.putExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, pos);
+			context.startService(intentService);
+		}
 	}
 	
 }
