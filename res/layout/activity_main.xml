@@ -76,6 +76,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
         </org.fer.urgence.PhoneNumber>
+
+        <TextView
+            android:id="@+id/textView6"
+            style="@style/titleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/menu_settings"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Switch
+            android:id="@+id/sendSmsOnTry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_sms_on_real_timeout" />
         
     </LinearLayout>
 

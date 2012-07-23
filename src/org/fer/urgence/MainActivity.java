@@ -15,6 +15,7 @@ import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.View;
+import android.widget.Switch;
 import static org.fer.urgence.PreferenceMgr.*;
 
 public class MainActivity extends Activity implements OnLaunchContactPicker {
@@ -22,11 +23,13 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 	private static final int CONTACT_PICKER_RESULT = 1001;  
 	
 	PhoneNumber[] phoneNumberList = new PhoneNumber[MAX_PHONE_NUMBER];
+	Switch sendSmsOnTry;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sendSmsOnTry = (Switch) findViewById(R.id.sendSmsOnTry);
         int i = 0;
         phoneNumberList[i++] = (PhoneNumber) findViewById(R.id.phoneNumber0);
         phoneNumberList[i++] = (PhoneNumber) findViewById(R.id.phoneNumber1);
@@ -38,7 +41,7 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
         	 phoneNumberList[i].initSetContact(this, i);
         }
         phoneNumberList[0].setSmsVisible(View.INVISIBLE);
-        initFromPrefs();
+        restorePrefs();
     }
 
     public void onLaunchContactPicker(int pos) {  
@@ -92,6 +95,7 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 		for(int i = 0; i<MAX_PHONE_NUMBER; i++) {
 			phoneNumberList[i].restore(savedInstanceState, i);
 		}
+		savedInstanceState.getBoolean(PreferenceMgr.PREF_SEND_SMS_ON_TRY, false);
 	}
 
 	@Override
@@ -100,11 +104,12 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 		for(int i = 0; i<MAX_PHONE_NUMBER; i++) {
 			phoneNumberList[i].save(outState, i);
 		}
+		outState.putBoolean(PreferenceMgr.PREF_SEND_SMS_ON_TRY, sendSmsOnTry.isChecked());
 	}
 
 	@Override
 	protected void onPause() {
-		saveContacts();
+		savePrefs();
 		updateWidgetView();
 		super.onPause();
 	}
@@ -117,7 +122,7 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 		context.startService(intentService);
 	}
 
-	private void saveContacts() {
+	private void savePrefs() {
 		SharedPreferences prefs = getSharedPreferences(URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
 		PreferenceMgr prefMgr = new PreferenceMgr(prefs);
 		List<ShortContact> contacts = new ArrayList<ShortContact>();
@@ -126,10 +131,14 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 			contacts.add(shortContact);
 		}
 		prefMgr.saveAllContacts(contacts);
+		
+		Options options = new Options();
+		options.setSendSmsOnTry(sendSmsOnTry.isChecked());
+		prefMgr.saveOptions(options);
 		super.onStop();
 	}  
     
-   private void initFromPrefs() {
+   private void restorePrefs() {
 		SharedPreferences prefs = getSharedPreferences(URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
 		PreferenceMgr prefMgr = new PreferenceMgr(prefs);
 		List<ShortContact> contacts = prefMgr.getAllContacts();
@@ -141,6 +150,9 @@ public class MainActivity extends Activity implements OnLaunchContactPicker {
 			}
 			phoneNumberList[i].initPos(i);
 		}
+		
+		Options option = prefMgr.restoreOptions();
+		sendSmsOnTry.setChecked(option.isSendSmsOnTry());
    }
    
 }

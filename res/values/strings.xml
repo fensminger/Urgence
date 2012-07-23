@@ -1,25 +1,26 @@
 <resources>
 
-    <string name="app_name">Appels d\'urgence</string>
-    <string name="menu_settings">Paramètres</string>
-    <string name="title_activity_main">Appels d\'urgence</string>
+    <string name="app_name">Emergency call</string>
+    <string name="menu_settings">Parameters</string>
+    <string name="title_activity_main">Emergency call</string>
 
-    <string name="main_first_urgency_call">Numéro d\'urgence principal</string>
-    <string name="main_second_urgency_call">Urgence 2</string>
-    <string name="main_third_urgency_call">Urgence 3</string>
-    <string name="main_four_urgency_call">Urgence 4</string>
-    <string name="main_fith_urgency_call">Urgence 5</string>
+    <string name="main_first_urgency_call">Main urgency phone number</string>
+    <string name="main_second_urgency_call">Phone number 2</string>
+    <string name="main_third_urgency_call">Phone number 3</string>
+    <string name="main_four_urgency_call">Phone number 4</string>
+    <string name="main_fith_urgency_call">Phone number 5</string>
     
-    <string name="phone_number_send_sms">SMS sur urgence principal</string>
+    <string name="phone_number_send_sms">SMS on main urgency phone number</string>
     <string name="phone_number_change_contact">…</string>
-    <string name="phone_number_contact">Pas de contact</string>
+    <string name="phone_number_contact">No contact</string>
     <string name="phone_number_number">N/A</string>
-    <string name="phone_number_reset">Supprimer le contact ?</string>
-    <string name="phone_number_yes">Oui</string>
-    <string name="phone_number_no">Non</string>
-
-    <string name="dial_sms_body">Je viens d\'appeler les secours.</string>
-    <string name="dial_sms_location">Je viens d\'appeler les secours. Je me trouve ici : http://maps.google.fr/maps?q={0}&amp;hl=fr</string>
-    <string name="dial_try_sms_body">Je viens de tenter d\'appeler les secours. Une erreur ?</string>
-    <string name="dial_try_sms_location">Je viens de tenter d\'appeler les secours. Une erreur ? Je me trouve ici : http://maps.google.fr/maps?q={0}&amp;hl=fr</string>
+    <string name="phone_number_reset">Delete the contact ?</string>
+    <string name="phone_number_yes">Yes</string>
+    <string name="phone_number_no">No</string>
+    <string name="send_sms_on_real_timeout">Send SMS on try calling emergency ?</string>
+    
+    <string name="dial_sms_body">I have juste call the emergency.</string>
+    <string name="dial_sms_location">I have juste call the emergency. I am here : http://maps.google.fr/maps?q={0}</string>
+    <string name="dial_try_sms_body">I try to call the emergency. An error ?</string>
+    <string name="dial_try_sms_location">I try to call the emergency. An error ? I am here : http://maps.google.fr/maps?q={0}</string>
 </resources>

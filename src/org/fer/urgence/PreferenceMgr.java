@@ -14,7 +14,8 @@ public final class PreferenceMgr {
 	private static final String PREF_IS_SMS = "IsSMS_";
 	private static final String PREF_PHONE_NUMBER = "PhoneNumber_";
 	private static final String PREF_NAME = "Name_";
-
+	
+	public static final String PREF_SEND_SMS_ON_TRY = "sendSmsOnTry";
 
 	private SharedPreferences prefs;
 
@@ -48,4 +49,15 @@ public final class PreferenceMgr {
 		}
 	}  
 
+	public void saveOptions(Options options) {
+		Editor editor = prefs.edit();
+		editor.putBoolean(PREF_SEND_SMS_ON_TRY, options.isSendSmsOnTry());
+		editor.commit();
+	}
+	
+	public Options restoreOptions() {
+		Options res = new Options();
+		res.setSendSmsOnTry(prefs.getBoolean(PREF_SEND_SMS_ON_TRY, false));
+		return res;
+	}
 }

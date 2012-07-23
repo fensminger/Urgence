@@ -111,8 +111,12 @@ public class EmergencyService extends Service {
 			Log.i(LOG, "TimeOutPhoneListener : Timeout, but send SMS.");
 			sendSmsWithGps();
 		} else {
-			Log.i(LOG, "TimeOutPhoneListener : Timeout, but send SMS try emergency.");
-			sendTryEmergencySmsWithGps();
+			if (getOptions().isSendSmsOnTry()) {
+				Log.i(LOG, "TimeOutPhoneListener : Timeout, but send SMS try emergency.");
+				sendTryEmergencySmsWithGps();
+			} else {
+				Log.i(LOG, "TimeOutPhoneListener : Timeout, does not send SMS.");
+			}
 		}
 		removePhoneCallListener();
 	}
@@ -317,6 +321,11 @@ public class EmergencyService extends Service {
 	private List<ShortContact> getContacts() {
 		SharedPreferences prefs = getApplication().getSharedPreferences(PreferenceMgr.URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
 		return new PreferenceMgr(prefs).getAllContacts();
+	}
+	
+	private Options getOptions() {
+		SharedPreferences prefs = getApplication().getSharedPreferences(PreferenceMgr.URGENCE_PREFS, Activity.MODE_MULTI_PROCESS);
+		return new PreferenceMgr(prefs).restoreOptions();
 	}
 
 	@Override
