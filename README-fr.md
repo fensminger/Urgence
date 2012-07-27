@@ -7,12 +7,12 @@ Cette Application a pour objectif de vous permettre d'appeler rapidement les sec
 
 Elle permet via un Widget 4x2 d'appeler les secours via le bouton principal et d'appeler rapidement 4 contacts privilégiés.
 
-![](./doc/img/UrgenceWidget.png)
+![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceWidget.png?raw=true)
 
 L'application principal permet de configurer et d'appeler les secours et les contacts privilégiés. Un appui long sur un contact permet de l'enlever du numéro d'urgence. Aucune action n'est évidemment effectué au niveau du contact lui-même.
 L'application se base entièrement sur la liste des numéros de téléphone existant dans celui-ci.
 
-![](./doc/img/UrgenceParam1.png)
+![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceParam1.png?raw=true)
 
 
 ### Appel du contact d'urgence principal ###
@@ -21,7 +21,7 @@ Ce bouton permet d'appeler les urgences (par exemple le 112 ou une personne priv
 
 Si l'option "Envoi d'un SMS sur tentative d'appel" est activé, un ou plusieurs SMS seront envoyés à partir du moment que vous avez appuyer sur le bouton principal d'appel. Le message sera néanmoins moins alarmiste indiquant qu'il s'agit peut-être d'une erreur.
 
-![](./doc/img/UrgenceParam2.png)
+![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceParam2.png?raw=true)
 
 ### Appel des autres contacts ###
 
