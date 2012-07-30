@@ -9,7 +9,7 @@ Elle permet via un Widget 4x2 d'appeler les secours via le bouton principal et d
 
 ![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceWidget.png?raw=true)
 
-L'application principal permet de configurer et d'appeler les secours et les contacts privilégiés. Un appui long sur un contact permet de l'enlever du numéro d'urgence. Aucune action n'est évidemment effectué au niveau du contact lui-même.
+L'application principal permet de configurer et d'appeler les secours et les contacts privilégiés. Un appui long sur un contact permet de l'enlever du numéro d'urgence. Aucune action n'est évidemment effectuée au niveau du contact lui-même.
 L'application se base entièrement sur la liste des numéros de téléphone existant dans celui-ci.
 
 ![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceParam1.png?raw=true)
@@ -17,15 +17,15 @@ L'application se base entièrement sur la liste des numéros de téléphone exis
 
 ### Appel du contact d'urgence principal ###
 
-Ce bouton permet d'appeler les urgences (par exemple le 112 ou une personne privilégiée). Si au niveau du paramétrage des autres contacts vous avez coché la case SMS, un SMS sera envoyé avec vos coordonnées approximatives indiquant à cette personne que vous avez appelé les secours. Le(s) SMS est (sont) envoyé(s) 2 minutes plus tard lorsque vous avez appuyer sur le bouton d'appel du téléphone.  
+Ce bouton permet d'appeler les urgences (par exemple le 112 ou une personne privilégiée). Si au niveau du paramétrage des autres contacts vous avez coché la case SMS, un SMS sera envoyé avec vos coordonnées approximatives indiquant à cette personne que vous avez appelé les secours. Le(s) SMS est (sont) envoyé(s) 2 minutes plus tard uniquement si vous avez appuyé sur le bouton d'appel du téléphone.  
 
-Si l'option "Envoi d'un SMS sur tentative d'appel" est activé, un ou plusieurs SMS seront envoyés à partir du moment que vous avez appuyer sur le bouton principal d'appel. Le message sera néanmoins moins alarmiste indiquant qu'il s'agit peut-être d'une erreur.
+Si l'option "Envoi d'un SMS sur tentative d'appel" est activé, un ou plusieurs SMS seront envoyés à partir du moment que vous avez appuyé sur le bouton principal d'appel. Le message sera néanmoins moins alarmiste indiquant qu'il s'agit peut-être d'une erreur.
 
 ![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceParam2.png?raw=true)
 
 ### Appel des autres contacts ###
 
-Les 4 boutons plus petits sont en fait des raccourcis vers vos personnes privilégiées pour les appeler directement.
+Les 4 boutons plus petits sont en fait des raccourcis vers vos personnes privilégiées pour les appeler directement. Aucun SMS ne sera envoyé.
 
 ## Evolutions futures ##
 
