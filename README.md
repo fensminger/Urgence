@@ -1,4 +1,4 @@
-[In french](https://github.com/fensminger/Urgence/blob/master/README-fr.md)
+[En français](https://github.com/fensminger/Urgence/blob/master/README-fr.md)
 
 Emergency call
 =========
@@ -11,7 +11,7 @@ A Widget (size 4x2) allows to call emergency via the main button and quickly cal
 
 ![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceWidget.png?raw=true)
 
-The main application is used to configure and to call for emergency and other contacts. A long press on a contact can remove the emergency number. No action is obviously done on the contact itself.
+The main application is used to configure and to call for emergency and other contacts. A long press on a contact can remove this contact from the emergency number. No action is obviously done on the contact itself.
 The application is based entirely on the list of phone numbers existing in the phone.
 
 ![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceParam1.png?raw=true)
@@ -19,9 +19,9 @@ The application is based entirely on the list of phone numbers existing in the p
 
 ### Call the main emergency contact ###
 
-This button allows to call the emergency (eg, 112 or a privileged person). If in the settings of other contacts you have checked the SMS box, an SMS will be sent with your approximate location indicating the person that you have called for assistance. SMS is sent 2 minutes later only if you press the button of the phone.
+This button allows to call the emergency (for example, 112 or a privileged person). If in the settings of other contacts you have checked the SMS box, an SMS will be sent with your approximate location. And this SMS will mention to the person that you have called. SMS is sent 2 minutes later only if you press the button of the phone.
 
-If "Sending an SMS on try calling emergency" is activated, one or more SMS are sent from the moment you press the main button. The message would still be less alarmist indicating that this is perhaps a mistake.
+If "Sending an SMS on try calling emergency" is activated, one or more SMS are sent from the moment you press the main button. Nevertheless, the message would be less alarmist indicating that this is perhaps a mistake.
 
 ![](https://github.com/fensminger/Urgence/blob/master/doc/img/UrgenceParam2.png?raw=true)
 
